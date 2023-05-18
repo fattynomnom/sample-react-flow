@@ -48,12 +48,28 @@ export const workflowSlice = createSlice({
                     selected: payload.selected
                 }
             }
+        },
+        addNode: state => {
+            const newId = crypto.randomUUID()
+            state.nodes = [
+                ...state.nodes,
+                {
+                    id: newId,
+                    data: { label: `Node ${newId}` },
+                    position: { x: 10, y: 10 }
+                }
+            ]
         }
     }
 })
 
-export const { setWorkflowDetails, setNodes, setEdges, setSelectedNode } =
-    workflowSlice.actions
+export const {
+    setWorkflowDetails,
+    setNodes,
+    setEdges,
+    setSelectedNode,
+    addNode
+} = workflowSlice.actions
 
 export const getWorkflowDetails = (state: RootState) => state.workflowDetails
 
