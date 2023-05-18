@@ -1,8 +1,7 @@
 import { ArrowLongLeftIcon, PlusCircleIcon } from '@heroicons/react/24/solid'
 import SidebarList from '../SidebarList/SidebarList'
-import { Link } from 'react-router-dom'
 
-export default function WorkflowSidebarDetails() {
+export default function WorkflowSidebar({ onBack }: { onBack?: () => void }) {
     const projects = [
         { id: '1', name: 'Project 1', path: '/projects/1' },
         { id: '3', name: 'Project 3', path: '/projects/3' }
@@ -10,13 +9,13 @@ export default function WorkflowSidebarDetails() {
 
     return (
         <div className="space-y-5">
-            <Link
-                to="/"
-                className="flex space-x-4 items-center text-white hover:text-primary"
+            <div
+                className="flex space-x-4 items-center text-white hover:text-primary cursor-pointer"
+                onClick={onBack}
             >
                 <ArrowLongLeftIcon className="w-5 h-5" />
                 <span>All workflows</span>
-            </Link>
+            </div>
 
             <SidebarList title="Associated projects" items={projects} />
 

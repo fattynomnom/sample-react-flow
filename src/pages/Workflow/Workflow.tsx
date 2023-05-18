@@ -1,5 +1,4 @@
 import { ReactFlow } from 'reactflow'
-import { Layout } from '../../components/Layout/Layout'
 import { useState } from 'react'
 import 'reactflow/dist/style.css'
 
@@ -34,11 +33,11 @@ export default function Workflow() {
     const [edges, setEdges] = useState(initialEdges)
 
     return (
-        <Layout viewType="WORKFLOW">
+        <div>
             <h2>Workflow name</h2>
             <div className="w-full h-full">
                 <ReactFlow nodes={nodes} edges={edges} fitView />
             </div>
-        </Layout>
+        </div>
     )
 }
