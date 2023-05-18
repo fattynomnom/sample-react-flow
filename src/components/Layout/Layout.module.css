@@ -1,4 +1,0 @@
-li {
-    @apply border-l border-slate-800 py-1 pl-3 text-slate-700 text-sm cursor-pointer;
-    @apply hover:text-primary hover:border-primary;
-}

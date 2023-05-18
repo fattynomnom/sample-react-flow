@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/Home'
+import Workflow from './pages/Workflow/Workflow'
 import { NavBar } from './components/NavBar/NavBar'
 import { NavItem } from './components/NavBar/NavBar.d'
 
@@ -19,6 +20,7 @@ export default function App() {
                             element={nav.page}
                         />
                     ))}
+                <Route path="/workflows/:id" element={<Workflow />} />
             </Routes>
         </Router>
     )

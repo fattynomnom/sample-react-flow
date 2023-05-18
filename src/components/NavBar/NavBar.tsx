@@ -1,5 +1,4 @@
 import { Link, useLocation, matchPath } from 'react-router-dom'
-import './NavBar.module.css'
 import { NavItem } from './NavBar.d'
 
 export function NavBar({ nav }: { nav: NavItem[] }) {
@@ -8,7 +7,9 @@ export function NavBar({ nav }: { nav: NavItem[] }) {
     const navItemComponent = (navItem: NavItem) => (
         <li
             key={navItem.path}
-            className={matchPath(navItem.path, pathname) ? '!text-primary' : ''}
+            className={`font-bold text-sm text-white hover:text-slate-700 ${
+                matchPath(navItem.path, pathname) && '!text-primary'
+            }`}
         >
             <Link to={navItem.path}>{navItem.title}</Link>
         </li>

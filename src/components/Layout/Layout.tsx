@@ -1,30 +1,105 @@
-import { ReactNode } from 'react'
-import './Layout.module.css'
+import { ReactNode, useEffect, useState } from 'react'
 import Button from '../Button/Button'
+import { getProjects } from '../../services/ProjectsService'
+import { logError } from '../../services/LoggingService'
+import { Project } from '../../types/Project'
+import { Workflow } from '../../types/Workflow'
+import { getWorkflows } from '../../services/WorkflowsService'
+import SidebarList from '../SidebarList/SidebarList'
+import WorkflowSidebarDetails from '../WorkflowSidebarDetails/WorkflowSidebarDetails'
 
-export function Layout({ children }: { children: ReactNode }) {
+export function Layout({
+    children,
+    viewType
+}: {
+    children: ReactNode
+    viewType: 'MAIN' | 'PROJECT' | 'WORKFLOW'
+}) {
+    const [isActionsOpen, setIsActionsOpen] = useState(false)
+
+    const [isLoadingProjects, setIsLoadingProjects] = useState(false)
+    const [projects, setProjects] = useState<Project[]>([])
+
+    const [isLoadingWorkflows, setIsLoadingWorkflows] = useState(false)
+    const [workflows, setWorkflows] = useState<Workflow[]>([])
+
+    const fetchProjects = async () => {
+        setIsLoadingProjects(true)
+
+        try {
+            const result = await getProjects()
+            setProjects(result)
+        } catch (error) {
+            logError(error)
+        } finally {
+            setIsLoadingProjects(false)
+        }
+    }
+
+    const fetchWorkflows = async () => {
+        setIsLoadingWorkflows(true)
+
+        try {
+            const result = await getWorkflows()
+            setWorkflows(result)
+        } catch (error) {
+            logError(error)
+        } finally {
+            setIsLoadingWorkflows(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchProjects()
+        fetchWorkflows()
+    }, [])
+
     return (
-        <main className="max-w-7xl mx-auto">
+        <main className="max-w-7xl mx-auto h-[calc(100%-60px)]">
             <div className="fixed z-20 inset-0 top-[100px] left-[max(2rem,calc(50%-38rem))] right-auto w-[19.5rem] overflow-y-auto space-y-7">
                 <div>
-                    <Button label="Actions" className="w-full" />
-                    <ul className="flex flex-col space-y-2 mt-3 rounded-lg border border-slate-800 py-3">
-                        <li className="px-5">Create new project</li>
-                        <li className="px-5">Create new workspace</li>
-                    </ul>
+                    <Button
+                        label="Actions"
+                        className="w-full"
+                        onClick={() => setIsActionsOpen(!isActionsOpen)}
+                    />
+                    {isActionsOpen && (
+                        <ul className="flex flex-col space-y-2 mt-3 rounded-lg border border-slate-800 py-3">
+                            <li className="py-1 px-5 link">
+                                Create new project
+                            </li>
+                            <li className="py-1 px-5 link">
+                                Create new workspace
+                            </li>
+                        </ul>
+                    )}
                 </div>
 
-                <div>
-                    <div className="font-bold text-sm text-white mb-3">
-                        Projects
+                {viewType === 'MAIN' && (
+                    <div className="space-y-5">
+                        <SidebarList
+                            title="Projects"
+                            loading={isLoadingProjects}
+                            items={projects.map(project => ({
+                                ...project,
+                                path: `/projects/${project.id}`
+                            }))}
+                        />
+
+                        <SidebarList
+                            title="Workflows"
+                            loading={isLoadingWorkflows}
+                            items={workflows.map(workflow => ({
+                                ...workflow,
+                                path: `/workflows/${workflow.id}`
+                            }))}
+                        />
                     </div>
-                    <ul className="flex flex-col">
-                        <li>Project 1</li>
-                        <li>Project 2</li>
-                    </ul>
-                </div>
+                )}
+
+                {viewType === 'WORKFLOW' && <WorkflowSidebarDetails />}
             </div>
-            <div className="py-4 pl-[25rem] pr-8">{children}</div>
+            <div className="py-4 pl-[25rem] pt-7 pr-8 h-full">{children}</div>
         </main>
     )
 }
