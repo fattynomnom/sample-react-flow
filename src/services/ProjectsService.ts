@@ -1,4 +1,4 @@
-import { Node } from 'reactflow'
+import { Edge, Node } from 'reactflow'
 import axiosInstance from '../plugins/axios'
 import { Project, ProjectDetails, WorkflowGroupNode } from '../types/Project.d'
 
@@ -44,7 +44,6 @@ export const mapWorkflowsToNode = (
 
         const parentNode: WorkflowGroupNode = {
             id: parentNodeId,
-            type: 'group',
             data: {},
             position: {
                 // x coordinate should be arranged horizontally after the previous group node
@@ -83,4 +82,19 @@ export const mapWorkflowsToNode = (
 
         return [...acc, parentNode, ...childNodes]
     }, [] as Node[])
+}
+
+export const mapWorkflowsToEdge = (
+    workflows: ProjectDetails['workflows']
+): Edge[] => {
+    return workflows.reduce((acc, workflow) => {
+        return [
+            ...acc,
+            ...workflow.edges.map(edge => ({
+                ...edge,
+                source: `child-${edge.source}`,
+                target: `child-${edge.target}`
+            }))
+        ]
+    }, [] as Edge[])
 }

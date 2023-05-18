@@ -51,3 +51,11 @@ small {
 .react-flow__node.selected {
     @apply border-0 ring-2 ring-primary !important;
 }
+
+.react-flow__node-default {
+    @apply bg-slate-400 border-0 ring-slate-900 text-slate-900 !important;
+}
+
+.react-flow__node.parent {
+    @apply bg-slate-600 opacity-80 !important;
+}

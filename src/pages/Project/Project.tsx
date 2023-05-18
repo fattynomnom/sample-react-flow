@@ -2,6 +2,7 @@ import {
     Background,
     BackgroundVariant,
     Controls,
+    Edge,
     MiniMap,
     Node,
     OnSelectionChangeParams,
@@ -29,6 +30,7 @@ import {
 import { logError } from '../../services/LoggingService'
 import {
     getProjectDetails,
+    mapWorkflowsToEdge,
     mapWorkflowsToNode
 } from '../../services/ProjectsService'
 import { setProjectDetails } from '../../states/projectDetails'
@@ -41,6 +43,7 @@ export default function Project() {
     const { pathname } = useLocation()
     const [searchParams] = useSearchParams()
     const [nodes, setNodes] = useState<Node[]>([])
+    const [edges, setEdges] = useState<Edge[]>([])
 
     const fetchProjectDetails = async () => {
         if (!id) return
@@ -60,6 +63,9 @@ export default function Project() {
     useEffect(() => {
         const mappedNodes = mapWorkflowsToNode(projectDetails.workflows)
         setNodes(mappedNodes)
+
+        const mappedEdges = mapWorkflowsToEdge(projectDetails.workflows)
+        setEdges(mappedEdges)
     }, [projectDetails.workflows])
 
     return (
@@ -68,17 +74,13 @@ export default function Project() {
             <div className="w-full h-full mt-5 bg-slate-800 rounded">
                 <ReactFlow
                     nodes={nodes}
-                    // edges={workflowDetails.edges}
-                    onNodesChange={changes => {
+                    edges={edges}
+                    onNodesChange={changes =>
                         setNodes(applyNodeChanges(changes, nodes))
-                    }}
-                    // onEdgesChange={changes =>
-                    //     dispatch(
-                    //         setEdges(
-                    //             applyEdgeChanges(changes, workflowDetails.edges)
-                    //         )
-                    //     )
-                    // }
+                    }
+                    onEdgesChange={changes =>
+                        setEdges(applyEdgeChanges(changes, edges))
+                    }
                     // onConnect={connection =>
                     //     dispatch(
                     //         setEdges(addEdge(connection, workflowDetails.edges))
