@@ -7,7 +7,13 @@ export default function SidebarList({
     loading = false
 }: {
     title: string
-    items: { id: string; name: string; path: string }[]
+    items: {
+        id: string
+        name: string
+        path?: string
+        active?: boolean
+        onClick?: () => void
+    }[]
     loading?: boolean
 }) {
     return (
@@ -22,9 +28,15 @@ export default function SidebarList({
                 {items.map(item => (
                     <li
                         key={item.id}
-                        className="link border-l border-slate-800 hover:border-primary px-5 py-3"
+                        className={`link border-l border-slate-800 hover:border-primary px-5 py-3 ${
+                            item.active && '!border-primary !text-primary'
+                        }`}
                     >
-                        <Link to={item.path}>{item.name}</Link>
+                        {item.path ? (
+                            <Link to={item.path}>{item.name}</Link>
+                        ) : (
+                            <span onClick={item.onClick}>{item.name}</span>
+                        )}
                     </li>
                 ))}
             </ul>

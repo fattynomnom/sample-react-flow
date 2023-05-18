@@ -66,7 +66,7 @@ export function Layout() {
     }, [pathname])
 
     return (
-        <div>
+        <>
             <NavBar nav={nav} />
             <main className="max-w-7xl mx-auto h-[calc(100%-60px)]">
                 <div className="fixed z-20 inset-0 top-[100px] left-[max(2rem,calc(50%-38rem))] right-auto w-[19.5rem] overflow-y-auto space-y-7">
@@ -118,6 +118,6 @@ export function Layout() {
                     <Outlet />
                 </div>
             </main>
-        </div>
+        </>
     )
 }

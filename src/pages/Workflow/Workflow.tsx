@@ -1,43 +1,124 @@
-import { ReactFlow } from 'reactflow'
-import { useState } from 'react'
+import {
+    Background,
+    BackgroundVariant,
+    Controls,
+    MiniMap,
+    OnSelectionChangeParams,
+    ReactFlow,
+    addEdge,
+    applyEdgeChanges,
+    applyNodeChanges
+} from 'reactflow'
+import { useEffect } from 'react'
+import cloneDeep from 'lodash/cloneDeep'
 import 'reactflow/dist/style.css'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import {
+    useLocation,
+    useNavigate,
+    useParams,
+    useSearchParams
+} from 'react-router-dom'
+import { getWorkflowDetails } from '../../services/WorkflowsService'
+import {
+    setWorkflowDetails,
+    setEdges,
+    setNodes,
+    setSelectedNode
+} from '../../states/workflowDetails'
+import { logError } from '../../services/LoggingService'
 
 export default function Workflow() {
-    const initialNodes = [
-        {
-            id: '1',
-            type: 'input',
-            data: { label: 'Node 1' },
-            position: { x: 250, y: 25 }
-        },
+    const workflowDetails = useAppSelector(state => state.workflowDetails)
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const { id } = useParams()
+    const { pathname } = useLocation()
+    const [searchParams] = useSearchParams()
 
-        {
-            id: '2',
-            data: { label: 'Node 2' },
-            position: { x: 100, y: 125 }
-        },
-        {
-            id: '3',
-            type: 'output',
-            data: { label: 'Node 3' },
-            position: { x: 250, y: 250 }
+    const displaySelectedNode = () => {
+        const nodeId = searchParams.get('node')
+        if (nodeId && workflowDetails.nodes.length > 0) {
+            console.log(1)
+            dispatch(setSelectedNode({ selected: true, id: nodeId }))
         }
-    ]
+    }
 
-    const initialEdges = [
-        { id: 'e1-2', source: '1', target: '2' },
-        { id: 'e2-3', source: '2', target: '3', animated: true }
-    ]
+    const fetchWorkflowDetails = async () => {
+        if (!id) return
 
-    const [nodes, setNodes] = useState(initialNodes)
-    const [edges, setEdges] = useState(initialEdges)
+        try {
+            const result = await getWorkflowDetails(id)
+            dispatch(setWorkflowDetails(result))
+            dispatch(setNodes(result.nodes))
+            dispatch(setEdges(result.edges))
+        } catch (error) {
+            logError(error)
+        }
+    }
+
+    const setNodeIdQuery = ({ nodes }: OnSelectionChangeParams) => {
+        const firstNode = nodes[0]
+        if (firstNode) {
+            navigate(`${pathname}?node=${firstNode.id}`)
+        }
+    }
+
+    useEffect(() => {
+        fetchWorkflowDetails()
+    }, [id])
+
+    useEffect(() => {
+        displaySelectedNode()
+    }, [searchParams.get('node'), workflowDetails.nodes.length])
 
     return (
-        <div>
-            <h2>Workflow name</h2>
-            <div className="w-full h-full">
-                <ReactFlow nodes={nodes} edges={edges} fitView />
+        <>
+            <h2>{workflowDetails.name}</h2>
+            <div className="w-full h-full mt-5 bg-slate-800 rounded">
+                <ReactFlow
+                    nodes={workflowDetails.nodes}
+                    edges={workflowDetails.edges}
+                    onNodesChange={changes =>
+                        dispatch(
+                            setNodes(
+                                applyNodeChanges(changes, workflowDetails.nodes)
+                            )
+                        )
+                    }
+                    onEdgesChange={changes =>
+                        dispatch(
+                            setEdges(
+                                applyEdgeChanges(changes, workflowDetails.edges)
+                            )
+                        )
+                    }
+                    onConnect={connection =>
+                        dispatch(
+                            setEdges(addEdge(connection, workflowDetails.edges))
+                        )
+                    }
+                    onSelectionChange={setNodeIdQuery}
+                    fitView
+                >
+                    <MiniMap nodeStrokeWidth={3} zoomable pannable />
+                    <Controls />
+                    <Background
+                        id="1"
+                        gap={10}
+                        color="#334155"
+                        variant={BackgroundVariant.Lines}
+                    />
+                    <Background
+                        id="2"
+                        gap={100}
+                        offset={1}
+                        color="#0f172a"
+                        lineWidth={2}
+                        variant={BackgroundVariant.Lines}
+                    />
+                </ReactFlow>
             </div>
-        </div>
+        </>
     )
 }

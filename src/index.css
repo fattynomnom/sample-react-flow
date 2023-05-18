@@ -21,6 +21,12 @@
     -webkit-text-size-adjust: 100%;
 }
 
+html,
+body,
+#root {
+    @apply h-full;
+}
+
 h1 {
     @apply text-6xl text-white;
 }
@@ -40,4 +46,8 @@ small {
 
 .link {
     @apply text-slate-400 text-sm cursor-pointer hover:text-primary;
+}
+
+.react-flow__node.selected {
+    @apply border-0 ring-2 ring-primary !important;
 }
