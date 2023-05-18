@@ -1,0 +1,110 @@
+{
+    "id": "1",
+    "name": "Project 1",
+    "workflows": [
+        {
+            "id": "1",
+            "name": "Workflow 1",
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "nodes": [
+                {
+                    "id": "1",
+                    "data": {
+                        "label": "Node 1"
+                    },
+                    "position": {
+                        "x": 250,
+                        "y": 25
+                    }
+                },
+                {
+                    "id": "3",
+                    "data": {
+                        "label": "Node 3"
+                    },
+                    "position": {
+                        "x": 250,
+                        "y": 250
+                    }
+                },
+                {
+                    "id": "2",
+                    "data": {
+                        "label": "Node 2"
+                    },
+                    "position": {
+                        "x": 100,
+                        "y": 125
+                    }
+                }
+            ],
+            "edges": [
+                {
+                    "id": "1",
+                    "source": "1",
+                    "target": "2"
+                },
+                {
+                    "id": "2",
+                    "source": "2",
+                    "target": "3"
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "name": "Workflow 2",
+            "position": {
+                "x": 500,
+                "y": 0
+            },
+            "nodes": [
+                {
+                    "id": "A",
+                    "data": {
+                        "label": "Node A"
+                    },
+                    "position": {
+                        "x": 250,
+                        "y": 25
+                    }
+                },
+                {
+                    "id": "B",
+                    "data": {
+                        "label": "Node B"
+                    },
+                    "position": {
+                        "x": 250,
+                        "y": 125
+                    }
+                },
+                {
+                    "id": "C",
+                    "data": {
+                        "label": "Node C"
+                    },
+                    "position": {
+                        "x": 250,
+                        "y": 250
+                    }
+                }
+            ],
+            "edges": [
+                {
+                    "id": "1",
+                    "source": "A",
+                    "target": "B"
+                },
+                {
+                    "id": "1",
+                    "source": "A",
+                    "target": "C"
+                }
+            ]
+        }
+    ]
+}

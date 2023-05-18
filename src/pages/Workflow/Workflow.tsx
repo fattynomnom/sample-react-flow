@@ -38,7 +38,6 @@ export default function Workflow() {
     const displaySelectedNode = () => {
         const nodeId = searchParams.get('node')
         if (nodeId && workflowDetails.nodes.length > 0) {
-            console.log(1)
             dispatch(setSelectedNode({ selected: true, id: nodeId }))
         }
     }

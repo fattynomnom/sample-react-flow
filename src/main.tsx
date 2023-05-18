@@ -6,6 +6,7 @@ import { Layout } from './components/Layout/Layout.tsx'
 import Workflow from './pages/Workflow/Workflow.tsx'
 import { Provider } from 'react-redux'
 import { store } from './store.ts'
+import Project from './pages/Project/Project.tsx'
 
 mockServiceWorker.start()
 
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
             {
                 path: '/workflows/:id',
                 element: <Workflow />
+            },
+            {
+                path: '/projects/:id',
+                element: <Project />
             }
         ]
     }
