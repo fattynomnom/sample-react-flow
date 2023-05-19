@@ -47,8 +47,6 @@ export const mapWorkflowsToNode = (
             data: {},
             position: {
                 // x coordinate should be arranged horizontally after the previous group node
-                // note: seems like react-flow default parent node x position is fixed to 0 no matter what the config is
-                // working around this issue by adjusting all work
                 x: previousNode
                     ? config.spaceBetweenWorkflows + previousNode.style.width
                     : 0,

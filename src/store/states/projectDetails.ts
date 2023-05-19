@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../store'
-import { ProjectDetails } from '../types/Project.d'
+import type { RootState } from '..'
+import { ProjectDetails } from '../../types/Project'
 
 const initialState: ProjectDetails = {
     id: '',

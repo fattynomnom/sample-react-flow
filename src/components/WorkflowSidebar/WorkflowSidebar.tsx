@@ -1,8 +1,8 @@
 import { ArrowLongLeftIcon, PlusCircleIcon } from '@heroicons/react/24/solid'
 import SidebarList from '../SidebarList/SidebarList'
-import { useAppDispatch, useAppSelector } from '../../hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { addNode } from '../../states/workflowDetails'
+import { addNode } from '../../store/states/workflowDetails'
 
 export default function WorkflowSidebar({ onBack }: { onBack?: () => void }) {
     const workflowDetails = useAppSelector(state => state.workflowDetails)

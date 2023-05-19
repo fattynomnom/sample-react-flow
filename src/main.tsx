@@ -5,7 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { Layout } from './components/Layout/Layout.tsx'
 import Workflow from './pages/Workflow/Workflow.tsx'
 import { Provider } from 'react-redux'
-import { store } from './store.ts'
+import { store } from './store/index.ts'
 import Project from './pages/Project/Project.tsx'
 
 mockServiceWorker.start()
